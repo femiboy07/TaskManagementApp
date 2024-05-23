@@ -6,7 +6,7 @@ import { FormField, FormItem, FormLabel,FormControl,FormDescription,FormMessage,
 import { Select,SelectTrigger,SelectValue,SelectContent,SelectItem } from "../ui/select";
 import { Input } from "../ui/input";
 import { Button, buttonVariants } from "../ui/button";
-import { CrossIcon, DoorClosedIcon, PlusIcon, ShieldClose, SidebarClose, SidebarCloseIcon, XIcon } from "lucide-react";
+import {  PlusIcon, XIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useFieldArray } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,7 +46,7 @@ export default  function AddNewTaskModal({tab,title}){
    const dispatch=useDispatch() 
    const board=useSelector((state)=>state.data.data);
    const currentBoardStatus=useSelector((state)=>state.data.currentBoardStatus);
-   const targetBoard=board.boards?.find((b)=>b.name === tab);
+   const targetBoard=board?.boards?.find((b)=>b.name === tab);
    const [closeModal,setCloseModal]=useState(true);
    const [initial,setInitial]=useState(false)
    const colorTheme=useSelector((state)=>state.data.colorTheme);

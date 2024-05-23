@@ -8,7 +8,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage,Form } from ".
 import { Input } from "../ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addBoards, tabBoard } from "../../reduxApp/features/data/dataSlice";
+import { addBoards, tabBoard,setCurrentBoardStatus } from "../../reduxApp/features/data/dataSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -92,29 +92,35 @@ const removeCol=useCallback((index)=>{
 
 
 const handleClearValues=()=>{
-  setShowModalSide(false)
+  form.clearErrors()
   form.setValue('name', '');
   form.reset();
   form.setValue('columns', [{ name: "", id: generateNumericId(2),tasks:[] }]);
+  setShowModalSide(false);
 }
    
  
   const handleSubmitBoard=(data)=>{
    console.log(data)
-  if(!data) return;
+  if(!data){
+
+    return;
+  }
   dispatch(addBoards({
     id:generateNumericId(2),
     name:data?.name,
     columns:data?.columns
   }))
+  handleClearValues()
   dispatch(tabBoard(data?.name))
-  
-    handleClearValues()
+  dispatch(setCurrentBoardStatus(data?.name))
+
     
 } 
   
   const handleTrigger=()=>{
     setShowModalSide(true);
+    handleClearValues()
 
     if(changeSide){
       setChangeSide(false)
@@ -186,9 +192,11 @@ const handleClearValues=()=>{
           
         
           
-           <Button  className="w-full  rounded-full" type="submit" >
+          <Button  className="w-full  rounded-full" type="submit" >
            Create New Board
           </Button>
+        
+          
           </form>
             </DialogContent>
         </Dialog>
