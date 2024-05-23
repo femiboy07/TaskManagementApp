@@ -31,6 +31,7 @@ export const dataSlice=createSlice({
 
     reducers:{
         hydrate:(state,action)=>action.payload,
+
         getLocalData:(state,action)=>localData(state,action),
         selectedColumn:(state,action)=>onSelectBoard(state,action),
         addNewTask:(state,action)=>onAddNewTask(state,action),

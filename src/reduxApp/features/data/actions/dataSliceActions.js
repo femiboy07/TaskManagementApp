@@ -1,6 +1,3 @@
-
-// import { current } from "@reduxjs/toolkit";
-import { selectedColumn } from "../dataSlice";
 import { produce,current} from 'immer';
 
 
@@ -18,13 +15,13 @@ export const onSelectBoard=(state,action)=>{
 
 export const addBoard=(state,action)=>{
    const newBoard=action.payload
-    
+     const data=current(state.data)
      
-    return produce(state,draftState=>{
-        draftState.data.boards.push(newBoard)
+    const newState= produce(data,draftState=>{
+        draftState?.boards.push(newBoard)
     })
 
-    
+   return {...state,data:newState} 
 
 }
 
@@ -212,13 +209,7 @@ export const onDragDropTask = (state, action) => {
                         column
                     )
                 };
-                // const task=draft.data.boards[boardIndex].columns[sourceColumnIndex].tasks.find((item)=>item.id === sourceColumn.tasks[index])
-
-                // draft.data.boards[boardIndex].columns[sourceColumnIndex].tasks[movedTaskIndex]={
-                //     ...
-                // }
-
-                // draft.data.boards[boardIndex].columns[sourceColumnIndex].tasks[movedTaskIndex].status=newDestColumn
+                
                 // Check if selected board matches the current board being modified
                 if (draft.selectedBoard && draft.selectedBoard.id === currentBoardId) {
                     // Update the selected board's columns

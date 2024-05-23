@@ -27,7 +27,7 @@ export default function DeleteBoard({tab,deleteBoard,setDeleteBoard,setTrigger})
          dispatch(tabBoard(remainingBoards[0].name));
          dispatch(setCurrentBoardStatus(remainingBoards[0].name))
        } else {
-         dispatch(tabBoard(null)); // or handle the case where no boards are left
+         dispatch(tabBoard(null));
        }
 
       

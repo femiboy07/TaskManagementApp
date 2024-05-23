@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import './App.css'
-import { Card } from './components/ui/card';
 import Layout from './components/Layout/Layout.component';
 import { getLocalData,hydrate,setCurrentBoardStatus, setTheme, tabBoard } from './reduxApp/features/data/dataSlice';
 import { useEffect, useState } from 'react';
@@ -12,23 +10,24 @@ import { loadState, store } from './reduxApp/store';
 
 
 
+
 function App() {
     
     const dispatch=useDispatch(); 
     const [dataLo,setDataLo]=useState(null)
     const [loading,setLoading]=useState(false);
-   
-
+    const colorTheme=useSelector((state)=>state.data.colorTheme);
+    const themeChange=()=>colorTheme === 'dark' ? dispatch(setTheme('light')):dispatch(setTheme('dark'));
+    const board=useSelector((state)=>state.data.data);
 
 
    
   useEffect(()=>{
     const persistedState = loadState();
-    console.log(persistedState,"sjsjdjdj")
     const fetchData=async()=>{
       setLoading(true)
   try{
-    setLoading(false)
+    
     const response= await fetch('/data.json');
     const meet= await response.json()
     const get=meet;
@@ -40,13 +39,14 @@ function App() {
     }catch(error){
       console.error('Error fetching data',error)
     }finally{
-         setLoading(false);
+      setLoading(false);
     }
     }
     if (persistedState) {
+      
       store.dispatch(hydrate(persistedState.data));
-    }
-    if (persistedState && persistedState.data.data.length === 0) {
+     }
+    if (!persistedState && !persistedState?.data?.data?.boards ) {
       fetchData();
     }
   },[dispatch])
@@ -59,7 +59,7 @@ function App() {
 
     return (
          <div>
-         <Layout />
+          <Layout themeChange={themeChange} board={board}/>
         </div>
     );
   }

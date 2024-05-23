@@ -43,11 +43,8 @@ const formSchema=z.object({
 
 
 export default  function AddNewTaskModal({tab,title}){
-   const [addSubTask,setAddSubTask]=useState(false);
-   const dispatch=useDispatch()
-  
+   const dispatch=useDispatch() 
    const board=useSelector((state)=>state.data.data);
-  //  const tab=useSelector((state)=>state.data.boardTab);
    const currentBoardStatus=useSelector((state)=>state.data.currentBoardStatus);
    const targetBoard=board.boards?.find((b)=>b.name === tab);
    const [closeModal,setCloseModal]=useState(true);
@@ -75,7 +72,6 @@ const form=useForm({ resolver: zodResolver(formSchema.refine(
   }
 )),
   defaultValues: {
-  
     title: "",
     description:"",
     status:currentBoardStatus[0],
@@ -115,13 +111,14 @@ function generateUniqueRandomNumber() {
 
 
 const handleClearValues=()=>{
-  setInitial(false);
+  
   forms.clearErrors()
   forms.setValue('title', '');
  forms.setValue('description', '');
  // Clear subtasks array (if needed)
  forms.setValue('subtasks', [{ title: "", isCompleted: false }]);
  forms.setValue('status', currentBoardStatus[0]);
+ setInitial(false);
 }
 
 const handleSubmitTask=(data)=>{
@@ -137,18 +134,21 @@ if(!data) return;
   }}))
 
  handleClearValues()
-  setInitial(false)
-setCloseModal(false);
+  
 }
 
+function handleTrigger(){
+   setInitial(true)
+   handleClearValues()
+}
   
     
      return (
       <Form {...forms} className=" border-none outline-none">
        
-          <Dialog  onOpenChange={handleClearValues} > 
+          <Dialog  open={initial} onOpenChange={setInitial} > 
            
-           <DialogTrigger   className={buttonVariants({variant:"default",size:`${title === '' ? `icon`:''}`,className:`flex  cursor-pointer items-center pt-7 pb-7  ${title === ''?" rotate-90":""}   `})} >
+           <DialogTrigger onClick={handleTrigger}  className={buttonVariants({variant:"default",size:`${title === '' ? `icon`:''}`,className:`flex  cursor-pointer items-center pt-7 pb-7  ${title === ''?" rotate-90":""}   `})} >
            <div className={`flex   items-center text-lg ${title === '' ? 'rounded-full' :`rounded-full`}  pt-5 pb-5 `}>
             <PlusIcon className=" h-4 w-6 " /> 
             {title}
@@ -244,12 +244,7 @@ setCloseModal(false);
          <Button  className="w-full mt-5 rounded-full" type="submit"  >
              Create New Task
           </Button>
-        
-         
-          
-        
-      
-        </form> 
+      </form> 
         </DialogContent>
        
        </Dialog>

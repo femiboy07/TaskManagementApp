@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentBoardStatus, tabBoard } from "../../reduxApp/features/data/dataSlice";
-import { ArrowDownIcon, ArrowUpIcon, EyeOffIcon, FolderArchiveIcon, MoonIcon, SunIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, FolderArchiveIcon, MoonIcon, SunIcon } from "lucide-react";
 import CreateNewBoard from "./CreateNewBoard";
 import { Switch } from "../ui/switch";
 import { Button, buttonVariants } from "../ui/button";
@@ -12,12 +12,10 @@ import useInitialGetWidth from "../Hooks/useInitialGetWidth";
 
 
 
-export default function SideBarModal({themeChange,hideBar,setHidebar,showModalSide,setShowModalSide,colorTheme}){
+export default function SideBarModal({themeChange,showModalSide,setShowModalSide,colorTheme,board,changeSide,setChangeSide}){
 
     const dispatch=useDispatch()
-    const state=useSelector((state)=>state.data.data);
-    // const colorTheme=useSelector((state)=>state.data.colorTheme);
-    const [mode,setMode]=useState(colorTheme === "light");
+   const [mode,setMode]=useState(colorTheme === "light");
     const currentTab=useSelector((state)=>state.data.boardTab);
     const [switchArrow,setSwitchArrow]=useState(false);
     const [width]=useInitialGetWidth()
@@ -28,30 +26,26 @@ export default function SideBarModal({themeChange,hideBar,setHidebar,showModalSi
       }
 
       const handleOpenSideModal=()=>{
-        setShowModalSide(!showModalSide);
-        setSwitchArrow(!switchArrow);
-
-    }
+        setChangeSide(!changeSide);
+        setSwitchArrow(true);
+      }
 
 
        useEffect(()=>{
-           if(width >= 768 ){
-            setShowModalSide(!showModalSide)
-        
+        if(width >= 768 ){
+            setChangeSide(!changeSide)
+        }
+
+           if(changeSide){
+             setSwitchArrow(false)
            }
 
-           if(showModalSide){
-             setSwitchArrow(true)
-           }
-
-        
-       
-    },[setShowModalSide, showModalSide, width])
+      },[setChangeSide, changeSide, width])
     return (
-        <Dialog open={showModalSide} onOpenChange={handleOpenSideModal}>
+        <Dialog open={changeSide} onOpenChange={setChangeSide}>
             <DialogTrigger >
             <Button onClick={handleOpenSideModal} className={buttonVariants({variant:'sidecustomlight',className:' bg-transparent pl-0 transition-[rotate] duration-75 rotate-360'})}>
-          {!switchArrow && !showModalSide  ?
+          {!switchArrow && !changeSide  ?
           ( 
           <ArrowDownIcon size={15} className=" self-center cursor-pointer"/>
           )
@@ -61,8 +55,8 @@ export default function SideBarModal({themeChange,hideBar,setHidebar,showModalSi
     <DialogContent  className={`h-[25rem] w-75 overflow-auto  px-0 flex  justify-between  ${colorTheme === 'dark' ? ' dark border-[#3E3F4E] border-r bg-card  ':'  border-1 border-r bg-card '}       `}>
          <div className="flex flex-col justify-between ">
           <ul className={`w-full  pr-5   `}>
-          <li className="pt-2 pl-8 text-sm ">All BOARDS {state?.boards?.length}</li>
-            {state?.boards?.map((item,index)=>(
+          <li className="pt-2 pl-8 text-sm ">All BOARDS {board?.boards?.length}</li>
+            {board?.boards?.map((item,index)=>(
              <li key={index}   onClick={()=>{
               dispatch(tabBoard(item.name));
                dispatch(setCurrentBoardStatus(item.name))
@@ -72,7 +66,7 @@ export default function SideBarModal({themeChange,hideBar,setHidebar,showModalSi
               <span href='/' typeof="button">{item.name}</span>
               </li>
              ))}
-      {currentTab && <CreateNewBoard  tab={currentTab}/>}
+     <CreateNewBoard setShowModalSide={setShowModalSide} setChangeSide={setChangeSide} changeSide={changeSide} showModalSide={showModalSide}  tab={currentTab}/>
   </ul>
 
   <div className=" mb-10 mt-5 flex flex-col items-center justify-center    ">

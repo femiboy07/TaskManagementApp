@@ -1,19 +1,14 @@
-
-import React, { forwardRef, useCallback, useEffect, useState } from "react";
+import React, {useCallback, useState } from "react";
 import { Card,CardHeader,CardContent } from "../ui/card";
 import { useDispatch, useSelector } from "react-redux";
 import { changeStatus, editSubtask } from "../../reduxApp/features/data/dataSlice";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { EllipsisVertical } from "lucide-react";
-import { Checkbox } from "../ui/checkbox";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Select } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useForm } from "react-hook-form";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import EditBoard from "../Modals/EditBoard";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import EditTask from "../Modals/EditTask";
-import DeleteBoard from "../Modals/DeleteBoard";
 import DeleteTask from "../Modals/DeleteTask";
 
 
@@ -21,8 +16,7 @@ import DeleteTask from "../Modals/DeleteTask";
 
 
 export default function CardItems({cardRef,tasks,provided,tab,columns}){
-                const [checkedSubtasks,setCheckedSubtasks]=useState(false);
-                const [isCompleted,setIsCompleted]=useState(false);
+                
                 const [subtasks,setSubtasks]=useState(tasks)
                 const dispatch=useDispatch();
                 const substask=subtasks.subtasks.length;
@@ -30,12 +24,12 @@ export default function CardItems({cardRef,tasks,provided,tab,columns}){
                 const status=useSelector((state)=>state.data.currentBoardStatus);
                 const colorTheme=useSelector((state)=>state.data.colorTheme);
                 const [cardDropDown,setCardDropDown]=useState(false);
-                const [cardItem,setCardItem]=useState(false)
+               
                 
                 console.log(status)
                 console.log(boards,"boards");
                 const item=boards.boards.find((item)=>item.name === tab);
-               //  const columnStatus=item.columns.filter((item)=>item.tasks.map((item)=>item.id === tasks.id));
+               
                const column=item.columns;
                console.log(column);
                
@@ -43,13 +37,11 @@ export default function CardItems({cardRef,tasks,provided,tab,columns}){
                 console.log(item)
                 const filteCompletedSubstask=subtasks.subtasks.filter((items)=>items.isCompleted !== false).length;
                 console.log(columns);
-              const {formState,control,register}=useForm()
+         
 
          const handleCheckedChange=useCallback((index)=>{
          
-
-        
-         console.log(subtasks)
+          console.log(subtasks)
           const item=subtasks.subtasks.slice();
           console.log(item)
           console.log(item)
@@ -62,7 +54,7 @@ export default function CardItems({cardRef,tasks,provided,tab,columns}){
 
          
       const handleStatusChange=useCallback((value)=>{
-         // origcolumnStatus,currentBoard,tasks,newColumnStatus;
+         
          const original=subtasks.status;
          const newColumnStatus=value
 
@@ -71,11 +63,7 @@ export default function CardItems({cardRef,tasks,provided,tab,columns}){
            dispatch(changeStatus({origcolumnStatus:tasks.status,currentBoard:tab,tasks:tasks.id,newColumnStatus:newColumnStatus}))
       },[dispatch, subtasks.status, tab, tasks.id, tasks.status])
 
-     const handleMenuItemSelect=(e)=>{
-         
-           setCardDropDown(false)
-      }
-
+     
      return (
       <>
             

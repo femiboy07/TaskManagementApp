@@ -10,8 +10,6 @@ import { deleteTask } from '../../reduxApp/features/data/dataSlice';
 
 export default function DeleteTask({tab,deleteBoard,setDeleteBoard,setTrigger,tasks,setCardDropDown,cardDropDown}){
     const colorTheme=useSelector((state)=>state.data.colorTheme);
-    const state=useSelector((state)=>state.data.data);
-    const currentBoardStatus=useSelector((state)=>state.data.currentBoardStatus)
     const dispatch=useDispatch();
 
     const  handleDeleteTask=()=>{

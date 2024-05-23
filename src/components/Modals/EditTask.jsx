@@ -47,7 +47,6 @@ export default  function EditTask({tab,oldTask,setCardDropDown,cardDropDown}){
    const dispatch=useDispatch()
   
    const board=useSelector((state)=>state.data.data);
-  //  const tab=useSelector((state)=>state.data.boardTab);
    const currentBoardStatus=useSelector((state)=>state.data.currentBoardStatus);
    const targetBoard=board.boards?.find((b)=>b.name === tab);
    const [closeModal,setCloseModal]=useState(true);
@@ -106,11 +105,7 @@ const removeSubtask=useCallback((index)=>{
   remove(index)
 },[remove]);
 
-const handleKeyDown = (event) => {
-  if (event.key === ' ') {
-    console.log('Spacebar pressed');
-  }
-};
+
 
 
 function generateUniqueRandomNumber() {
@@ -130,7 +125,6 @@ if(!data) return;
 
   forms.setValue('title', '');
   forms.setValue('description', '');
-  // Clear subtasks array (if needed)
   forms.setValue('subtasks', [{ title: "", isCompleted: false }]);
   forms.setValue('status', currentBoardStatus[0]);
   setCloseModal(false);

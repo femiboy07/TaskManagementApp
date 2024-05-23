@@ -30,11 +30,9 @@ const formSchema=z.object({
 
 
 export default function AddNewColumn({setActiveTab,activeBar}){
-   const [addSubTask,setAddSubTask]=useState(false);
    const dispatch=useDispatch()
    const board=useSelector((state)=>state.data.data);
    const tab=useSelector((state)=>state.data.boardTab);
-   const currentBoardStatus=useSelector((state)=>state.data.selectedBoard);
    const targetBoards=board.boards?.find((b)=>b.name === tab);
    const [closeModal,setCloseModal]=useState(false);
    const colorTheme=useSelector((state)=>state.data.colorTheme);
@@ -42,10 +40,6 @@ export default function AddNewColumn({setActiveTab,activeBar}){
 
 
 
-
-   function generateUniqueRandomNumber() {
-    return uuidv4().replace(/-/g, '').slice(0, 10);
-  }
     
 
   const form=useForm({

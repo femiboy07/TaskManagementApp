@@ -35,12 +35,11 @@ const formSchema=z.object({
 
 
 export default function EditBoard({setEditBoard,setDeleteBoard,setIsDialogOpen,handleEditBoardClick,setTrigger,trigger,setDialog,dialog}){
-    const [addSubTask,setAddSubTask]=useState(false);
+    
    const dispatch=useDispatch()
    const colorTheme=useSelector((state)=>state.data.colorTheme);
    const board=useSelector((state)=>state.data.data);
    const tab=useSelector((state)=>state.data.boardTab);
-   const currentBoardStatus=useSelector((state)=>state.data.selectedBoard);
    const targetBoards=board.boards?.find((b)=>b.name === tab);
 
 

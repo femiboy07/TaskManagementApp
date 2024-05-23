@@ -8,7 +8,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage,Form } from ".
 import { Input } from "../ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addBoards } from "../../reduxApp/features/data/dataSlice";
+import { addBoards, tabBoard } from "../../reduxApp/features/data/dataSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
@@ -37,7 +37,7 @@ const formSchema=z.object({
 
 
 
-export default function CreateNewBoard({tab,setShowModalSide}){
+export default function CreateNewBoard({setShowModalSide,icon,breifCaseIcon,showModalSide,setChangeSide,changeSide}){
 
     const dispatch=useDispatch()
   
@@ -45,7 +45,7 @@ export default function CreateNewBoard({tab,setShowModalSide}){
     // const tab=useSelector((state)=>state.data.boardTab);
     console.log(board.boards)
     const currentBoardStatus=useSelector((state)=>state.data.currentBoardStatus);
-    const targetBoard=board.boards?.find((b)=>b.name === tab);
+    
     const colorTheme=useSelector((state)=>state.data.colorTheme);
   const [open,setOpen]=useState(true)
 
@@ -92,14 +92,10 @@ const removeCol=useCallback((index)=>{
 
 
 const handleClearValues=()=>{
- 
-  
+  setShowModalSide(false)
   form.setValue('name', '');
   form.reset();
-  // Clear subtasks array (if needed)
   form.setValue('columns', [{ name: "", id: generateNumericId(2),tasks:[] }]);
-  
-  
 }
    
  
@@ -111,22 +107,27 @@ const handleClearValues=()=>{
     name:data?.name,
     columns:data?.columns
   }))
+  dispatch(tabBoard(data?.name))
+  
     handleClearValues()
-    setOpen(false);
-  // form.setValue('name', '');
+    
+} 
   
-  // // Clear subtasks array (if needed)
-  // form.setValue('columns', [{ name: "", id: generateNumericId(2),tasks:[] }]);
-  
-  
-  }  
+  const handleTrigger=()=>{
+    setShowModalSide(true);
+
+    if(changeSide){
+      setChangeSide(false)
+    }
+    
+  }
     return(
         <Form {...form}>
-        <Dialog    onOpenChange={handleClearValues}> 
-            <DialogTrigger  asChild>
+        <Dialog  open={showModalSide}  onOpenChange={setShowModalSide}> 
+            <DialogTrigger onClick={handleTrigger} >
             <li  className={"flex items-center gap-2   p-3 pl-8  rounded-r-full "}>
-                <FolderArchiveIcon size={18}/>   
-                    <Button
+                 {breifCaseIcon}
+                  <Button
                      className={buttonVariants({variant:"sidecustom", className:' text-xl font-extrabold bg-transparent flex justify-start text-left  pl-0'})  } >  
                        <PlusIcon size={18}/>
                         Create New Board
@@ -183,25 +184,12 @@ const handleClearValues=()=>{
              AddNewColumn</Button> 
              </div>
           
-          {form.formState?.errors?.name || form.formState?.errors?.columns ?
-          <Button  className="w-full  rounded-full" type="submit" >
-              Create New Board
-           </Button>:
+        
           
            <Button  className="w-full  rounded-full" type="submit" >
            Create New Board
           </Button>
-          
-         
-           
-           }
-            
-          
-         
-         
-           
-          
-            </form>
+          </form>
             </DialogContent>
         </Dialog>
         </Form>
